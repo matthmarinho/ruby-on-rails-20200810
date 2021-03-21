@@ -1,0 +1,21 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8mb4
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: root
+  password: root
+  host: localhost
+
+development:
+  <<: *default
+  database: ruby_on_rails_20200810_development
+
+test:
+  <<: *default
+  database: ruby_on_rails_20200810_test
+
+production:
+  <<: *default
+  database: vt3hxebmb1y195ud
+  username: yd7e51el9nd8rtgw
+  password: ixzywymibuh6fvdp
