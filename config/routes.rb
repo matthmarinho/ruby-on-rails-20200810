@@ -11,4 +11,6 @@ Rails.application.routes.draw do
       resources :products
     end
   end
+
+  root 'home#index'
 end
