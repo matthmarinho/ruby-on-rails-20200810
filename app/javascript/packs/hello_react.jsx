@@ -1,9 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
+import Home from '../components/home';
 
 const Hello = props => (
-  <div>Agora vai {props.name}!</div>
+  <div>Hello {props.name}!</div>
 )
 
 Hello.defaultProps = {
@@ -16,7 +17,7 @@ Hello.propTypes = {
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
-    <Hello name="React" />,
+    <Home />,
     document.body.appendChild(document.createElement('div')),
   )
 })
