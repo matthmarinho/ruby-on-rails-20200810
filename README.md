@@ -27,3 +27,4 @@ password: admin
 
 * [Resque](https://github.com/resque/resque)
 * [JWT](https://github.com/jwt/ruby-jwt)
+
