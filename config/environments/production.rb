@@ -117,4 +117,8 @@ Rails.application.configure do
   # config.active_record.database_selector = { delay: 2.seconds }
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
+
+  RubyOnRails20200810::Application.configure do
+    ENV["REDISTOGO_URL"] = 'redis://redistogo:1568ae4f4d8a009933a5d75bac583046@scat.redistogo.com:11361/'
+  end
 end

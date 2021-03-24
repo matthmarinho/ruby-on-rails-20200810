@@ -16,6 +16,10 @@ gem 'jwt'
 gem 'simple_command'
 gem 'rack-cors'
 gem 'react-rails'
+gem 'redis-rails'
+gem 'redis'
+gem 'resque', require: 'resque/server'
+gem 'data_uri', '~> 0.1.0'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

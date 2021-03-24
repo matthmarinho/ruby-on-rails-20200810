@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_21_085012) do
+ActiveRecord::Schema.define(version: 2021_03_24_025229) do
 
   create_table "products", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title"
-    t.string "type"
+    t.string "product_type"
     t.string "description"
     t.string "filename"
     t.float "height"

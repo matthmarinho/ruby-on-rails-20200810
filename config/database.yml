@@ -9,6 +9,8 @@ default: &default
 development:
   <<: *default
   database: ruby_on_rails_20200810_development
+  username: root
+  password: root_123
 
 test:
   <<: *default

@@ -1,43 +1,54 @@
 class Api::V1::ProductsController < ApplicationController
-  before_action :set_product, only: %i[ show update destroy ]
+	before_action :set_product, only: %i[ show update destroy ]
 
-  def index
-    @products = Product.all
-    render json: @products
-  end
+	def index
+		@products = Product.all
+		render json: @products, status: 200
+	end
 
-  def show
-    render json: @product
-  end
+	def show
+		render json: @product, status: 200
+	end
 
-  def create
-    @product = Product.new(product_params)
+	def create
+		begin
+			ProcessJson.new(product_params).process
+			@products = Product.all
+			render json: @products, status: 200
+		rescue StandardError, AnotherError => e
+			render :json => { :errors => e.inspect }
+		end
+	end
 
-    if @product.save
-      render :show, status: :created, location: @product
-    else
-      render json: @product.errors, status: :unprocessable_entity
-    end
-  end
+	def update
+		pp product_params
+		if @product.update(product_params)
+			render json: @product, status: 201
+		else
+			render json: @product.errors, status: :unprocessable_entity
+		end
+	end
 
-  def update
-    if @product.update(product_params)
-      render :show, status: :ok, location: @product
-    else
-      render json: @product.errors, status: :unprocessable_entity
-    end
-  end
+	def destroy
+			@product.destroy
+	end
 
-  def destroy
-    @product.destroy
-  end
-
-  private
+	private
     def set_product
-      @product = Product.find(params[:id])
+      	@product = Product.find(params[:id])
     end
 
     def product_params
-      params.fetch(:product, {})
+		params.require(:product).permit(
+			:file, 
+			:title,
+			:product_type,
+			:description,
+			:filename,
+			:height,
+			:width,
+			:price,
+			:rating
+		)
     end
 end
