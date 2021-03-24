@@ -11,23 +11,34 @@ import Button from "@material-ui/core/Button";
 import axios from "axios";
 import NumberFormat from 'react-number-format';
 import { DateTime } from "luxon";
-import { CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, IconButton, TextField, Typography } from "@material-ui/core";
+import { Dialog, DialogContent, DialogTitle, FormControlLabel, Grid, IconButton, TablePagination, TextField, Toolbar, Typography } from "@material-ui/core";
 import { useForm } from "react-hook-form";
+import { Skeleton } from "@material-ui/lab";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     table: {
       minWidth: 650
     },
     divLoading: {
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingBottom: '30px',
+    },
+    title: {
+        flex: '1 1 100%',
+    },
+    root: {
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(1),
     }
-});
+}));
 
-const getProducts = async (setIsError, setIsLoading, setProducts) => {
+const getProducts = async (setIsError, setIsLoading, setProducts, userToken, page) => {
     setIsError(false);
     setIsLoading(true);
     try {
-        const result = await axios.get('api/v1/products');
+        const result = await axios.get('api/v1/products', {
+            page: page
+        });
         setProducts(result.data);
     } catch (error) {
         setIsError(true);
@@ -35,7 +46,7 @@ const getProducts = async (setIsError, setIsLoading, setProducts) => {
     setIsLoading(false);
 };
 
-export default function TableData() {
+export default function TableData(props) {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
@@ -43,12 +54,13 @@ export default function TableData() {
     const [updatedProduct, setUpdatedProduct] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
     const [product, setProduct] = useState({});
+    const [page, setPage] = React.useState(0);
     const { register, handleSubmit, watch, errors } = useForm();
 
     useEffect(() => {
         if (products.length == 0)
-            getProducts(setIsError, setIsLoading, setProducts);
-    }), [];
+            getProducts(setIsError, setIsLoading, setProducts, props.userToken, page);
+    }), [page];
 
     const formatDate = (date) => {
         var date = DateTime.fromISO(date).toLocaleString()
@@ -56,7 +68,7 @@ export default function TableData() {
     };
 
     const deleteProduct = async (product) => {
-        await axios.delete('api/v1/products/' + product.id).then((response) => {
+        await axios.delete('api/v1/products/' + product.id, { headers: { Authorization: props.userToken }}).then((response) => {
             setDeletedProduct(true);
             getProducts(setIsError, setIsLoading, setProducts);
         })
@@ -72,7 +84,7 @@ export default function TableData() {
     }
 
     const onSubmit = async (data) => {
-        await axios.put('api/v1/products/' + product.id, data).then((response) => {
+        await axios.put('api/v1/products/' + product.id, data, { headers: { Authorization: props.userToken }}).then((response) => {
             setUpdatedProduct(true);
             getProducts(setIsError, setIsLoading, setProducts);
             setOpenEdit(false);
@@ -137,53 +149,78 @@ export default function TableData() {
         );
     }
 
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+    
+
     const classes = useStyles();
 
     return (
         <Fragment>
-            {setOpenEdit && renderDialog()}
+            {renderDialog()}
 
-            <div style={{ width: '100%' }}>
+            <div style={{ width: '100%', paddingTop: '30px' }}>
                 {isLoading ? (
                     <div className={classes.divLoading}>
-                        <CircularProgress />
+                        <Skeleton animation="wave" />
+                        <Skeleton animation="wave" />
+                        <Skeleton animation="wave" />
                     </div>
                 ) : (
-                    <TableContainer component={Paper}>
-                        <Table className={classes.table} aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Title</TableCell>
-                                    <TableCell align="center">Type</TableCell>
-                                    <TableCell align="center">Rating</TableCell>
-                                    <TableCell align="center">Price</TableCell>
-                                    <TableCell align="center">Created</TableCell>
-                                    <TableCell align="center">Actions</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {products.map(row => (
-                                    <TableRow key={`row_${row.id}`}>
-                                        <TableCell component="th" scope="row">{row.title}</TableCell>
-                                        <TableCell align="center">{row.product_type}</TableCell>
-                                        <TableCell align="center">{row.rating}</TableCell>
-                                        <TableCell align="center">
-                                            <NumberFormat value={row.price} displayType={'text'} thousandSeparator={true} prefix={'$'} />
-                                        </TableCell>
-                                        <TableCell align="center">{formatDate(row.created_at)}</TableCell>
-                                        <TableCell align="center">
-                                            <Button aria-label="edit" onClick={() => editProduct(row)}>
-                                                Edit
-                                            </Button>
-                                            <Button aria-label="delete" onClick={() => deleteProduct(row)}>
-                                                Delete
-                                            </Button>
-                                        </TableCell>
+                    <Paper>
+                        <Toolbar className={classes.root}>
+                            <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+                                Products
+                            </Typography>
+                        </Toolbar>
+                        <TableContainer component={Paper}>
+                            <Table className={classes.table} aria-label="simple table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Title</TableCell>
+                                        <TableCell align="center">Type</TableCell>
+                                        <TableCell align="center">Rating</TableCell>
+                                        <TableCell align="center">Price</TableCell>
+                                        <TableCell align="center">Created</TableCell>
+                                        {props.userToken && (
+                                            <TableCell align="center">Actions</TableCell>
+                                        )}
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                                </TableHead>
+                                <TableBody>
+                                    {products.map(row => (
+                                        <TableRow key={`row_${row.id}`}>
+                                            <TableCell component="th" scope="row">{row.title}</TableCell>
+                                            <TableCell align="center">{row.product_type}</TableCell>
+                                            <TableCell align="center">{row.rating}</TableCell>
+                                            <TableCell align="center">
+                                                <NumberFormat value={row.price} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                                            </TableCell>
+                                            <TableCell align="center">{formatDate(row.created_at)}</TableCell>
+                                            {props.userToken && (
+                                                <TableCell align="center">
+                                                    <Button aria-label="edit" onClick={() => editProduct(row)}>
+                                                        Edit
+                                                    </Button>
+                                                    <Button aria-label="delete" onClick={() => deleteProduct(row)}>
+                                                        Delete
+                                                    </Button>
+                                                </TableCell>
+                                            )}
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <TablePagination
+                            component="div"
+                            count={products.length}
+                            rowsPerPage={5}
+                            page={page}
+                            onChangePage={handleChangePage}
+                        />
+                    </Paper>
                 )}  
             </div>
         </Fragment>

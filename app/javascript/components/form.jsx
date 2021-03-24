@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Form() {
+export default function Form(props) {
     const [file, setFile] = useState(null);
     const [data, setData] = useState([]);
     const [isError, setIsError] = useState(false);
@@ -37,7 +37,11 @@ export default function Form() {
                     }
                 }
                 try {
-                    var result = axios.post('api/v1/products', data);
+                    var result = axios.post('api/v1/products', data, {
+                        headers: {
+                          'Authorization': `Basic ${props.userToken}` 
+                        }
+                    });
                     if (result.data) {
                         setOpenAlert(true);
                     } else {
@@ -93,35 +97,37 @@ export default function Form() {
                     Error! Invalid Json File
                 </Alert>
             }
-            <div className={classes.uploadForm}>
-                <Grid container spacing={2} justify="center">
-                    <Grid item>
-                        <TextField 
-                            id="outlined-basic" 
-                            variant="outlined" 
-                            size="small" 
-                            value={file ? file.name : "Upload .json archieve"}
-                            disabled 
-                        />
-                    </Grid>
-                    <Grid item>
-                        <label htmlFor="upload-photo">
-                            <input
-                                style={{ display: "none" }}
-                                id="upload-photo"
-                                name="upload-photo"
-                                onChange={handleUploadClick}
-                                type="file"
-                                accept="application/JSON"
+            {props.userToken && 
+                <div className={classes.uploadForm}>
+                    <Grid container spacing={2} justify="center">
+                        <Grid item>
+                            <TextField 
+                                id="outlined-basic" 
+                                variant="outlined" 
+                                size="small" 
+                                value={file ? file.name : "Upload .json file"}
+                                disabled 
                             />
-                            <Button className={classes.customButtom} color="primary" variant="contained" component="span">
-                                Upload
-                            </Button>
-                        </label>
+                        </Grid>
+                        <Grid item>
+                            <label htmlFor="upload-photo">
+                                <input
+                                    style={{ display: "none" }}
+                                    id="upload-photo"
+                                    name="upload-photo"
+                                    onChange={handleUploadClick}
+                                    type="file"
+                                    accept="application/JSON"
+                                />
+                                <Button className={classes.customButtom} color="primary" variant="contained" component="span" >
+                                    Upload
+                                </Button>
+                            </label>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </div>
-            <Table data={data} />
+                </div>
+            }
+            <Table data={data} userToken={props.userToken} />
         </Fragment>
     );
 };

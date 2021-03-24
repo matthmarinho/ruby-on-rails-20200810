@@ -1,4 +1,5 @@
 class Api::V1::ProductsController < ApplicationController
+	before_action :authenticate_request, only: %i[ show update destroy create ]
 	before_action :set_product, only: %i[ show update destroy ]
 
 	def index
@@ -41,6 +42,7 @@ class Api::V1::ProductsController < ApplicationController
     def product_params
 		params.require(:product).permit(
 			:file, 
+			:page,
 			:title,
 			:product_type,
 			:description,

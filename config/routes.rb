@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :authentication, only: [] do
         collection do
           post :authenticate
+          post :persist
         end
       end
 
