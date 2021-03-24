@@ -118,6 +118,8 @@ Rails.application.configure do
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
+  config.serve_static_assets = true
+
   RubyOnRails20200810::Application.configure do
     ENV["REDISTOGO_URL"] = 'redis://redistogo:ab86826c7cc49acc78c7c032b5a82004@hammerjaw.redistogo.com:11862/'
   end
