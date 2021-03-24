@@ -22,7 +22,6 @@ class Api::V1::ProductsController < ApplicationController
 	end
 
 	def update
-		pp product_params
 		if @product.update(product_params)
 			render json: @product, status: 201
 		else
@@ -40,7 +39,7 @@ class Api::V1::ProductsController < ApplicationController
     end
 
     def product_params
-		params.require(:product).permit(
+		params.require(:params).permit(
 			:file, 
 			:page,
 			:title,

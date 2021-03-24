@@ -7,9 +7,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import Form from './form';
-import { Button, ButtonBase, Dialog, DialogContent, DialogTitle, FormControlLabel, Grid, TextField } from '@material-ui/core';
+import { Button, Dialog, DialogContent, DialogTitle,  TextField } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import Table from './table';
 
 function Copyright() {
 	return (
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Home() {
 	const classes = useStyles();
 	const [openDialog, setOpenDialog] = useState(false);
-	const { register, handleSubmit, watch, errors } = useForm();
+	const { register, handleSubmit } = useForm();
 	const [userToken, setUserToken] = useState(null);
 
 	const handleClose = () => {
@@ -126,6 +127,7 @@ export default function Home() {
 				<div className={classes.heroContent}>
 					<Container maxWidth="md">
 						<Form userToken={userToken} />
+						<Table userToken={userToken} />
 					</Container>
 				</div>
 			</main>

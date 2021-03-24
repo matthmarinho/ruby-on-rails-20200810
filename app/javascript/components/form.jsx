@@ -2,7 +2,6 @@ import React, { Fragment, useState } from 'react';
 import { Button, Grid, IconButton, makeStyles, TextField } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import axios from 'axios';
-import Table from './table';
 import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme) => ({
@@ -32,7 +31,7 @@ export default function Form(props) {
             var dataURL = reader.result;
             if (dataURL) {
                 const data = {
-                    "product": {
+                    "params": {
                         "file": dataURL
                     }
                 }
@@ -127,7 +126,6 @@ export default function Form(props) {
                     </Grid>
                 </div>
             }
-            <Table data={data} userToken={props.userToken} />
         </Fragment>
     );
 };

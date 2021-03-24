@@ -11,7 +11,7 @@ import Button from "@material-ui/core/Button";
 import axios from "axios";
 import NumberFormat from 'react-number-format';
 import { DateTime } from "luxon";
-import { Dialog, DialogContent, DialogTitle, FormControlLabel, Grid, IconButton, TablePagination, TextField, Toolbar, Typography } from "@material-ui/core";
+import { Dialog, DialogContent, DialogTitle, Grid, TablePagination, TextField, Toolbar, Typography } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import { Skeleton } from "@material-ui/lab";
 
@@ -37,7 +37,9 @@ const getProducts = async (setIsError, setIsLoading, setProducts, userToken, pag
     setIsLoading(true);
     try {
         const result = await axios.get('api/v1/products', {
-            page: page
+            params: {
+              page: page
+            }
         });
         setProducts(result.data);
     } catch (error) {
@@ -60,7 +62,7 @@ export default function TableData(props) {
     useEffect(() => {
         if (products.length == 0)
             getProducts(setIsError, setIsLoading, setProducts, props.userToken, page);
-    }), [page];
+    }), [];
 
     const formatDate = (date) => {
         var date = DateTime.fromISO(date).toLocaleString()
