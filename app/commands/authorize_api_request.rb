@@ -1,3 +1,5 @@
+require 'jwt'
+
 class AuthorizeApiRequest
     prepend SimpleCommand
   
@@ -19,7 +21,8 @@ class AuthorizeApiRequest
     end
   
     def decoded_auth_token
-        @decoded_auth_token ||= JsonWebToken.decode(http_auth_header)
+        @decoded_auth_token ||= JWT.decode(http_auth_header)
+        pp @decoded_auth_token
     end
   
     def http_auth_header
