@@ -119,6 +119,6 @@ Rails.application.configure do
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
   RubyOnRails20200810::Application.configure do
-    ENV["REDISTOGO_URL"] = 'redis://redistogo:1568ae4f4d8a009933a5d75bac583046@scat.redistogo.com:11361/'
+    ENV["REDISTOGO_URL"] = 'redis://redistogo:ab86826c7cc49acc78c7c032b5a82004@hammerjaw.redistogo.com:11862/'
   end
 end
