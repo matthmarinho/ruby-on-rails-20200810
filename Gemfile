@@ -18,6 +18,7 @@ gem 'redis-rails'
 gem 'redis'
 gem 'resque', require: 'resque/server'
 gem 'data_uri', '~> 0.1.0'
+gem 'resque-heroku'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

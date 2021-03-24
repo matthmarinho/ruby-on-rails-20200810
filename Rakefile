@@ -7,3 +7,4 @@ Rails.application.load_tasks
 
 require 'resque'
 require 'resque/tasks'
+require 'resque/plugins/heroku/tasks'

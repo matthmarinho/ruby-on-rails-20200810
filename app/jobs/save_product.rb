@@ -1,4 +1,5 @@
 class SaveProduct
+    extend Resque::Plugins::Heroku
     @queue = "save_products"
   
     def self.perform(product_params)
