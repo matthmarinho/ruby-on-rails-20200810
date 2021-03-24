@@ -1,24 +1,29 @@
-# README
+# ruby-on-rails-20200810
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A Rails API with JWT Authentication and Resque Integration
 
-Things you may want to cover:
+### Install
 
-* Ruby version
+```
+bundle install
+bundle exec rake db:create
+bundle exec rake db:migrate
+bundle exec rake db:seed
+```
 
-* System dependencies
+### Run
 
-* Configuration
+```
+bundle exec rails server -p 3001
+redis-server
+QUEUE=* bundle exec rake environment resque:work&
+```
+### Obs.
 
-* Database creation
+login: admin@email.com
+password: admin
 
-* Database initialization
+## Made with
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* [Resque](https://github.com/resque/resque)
+* [JWT](https://github.com/jwt/ruby-jwt)
