@@ -3,8 +3,12 @@ class Api::V1::ProductsController < ApplicationController
 	before_action :set_product, only: %i[ show update destroy ]
 
 	def index
-		@products = Product.all
-		render json: @products, status: 200
+		page = product_params[:page]
+		limit = product_params[:limit]
+		offset = limit.to_i * page.to_i
+		@total = Product.all.count
+		@products = Product.limit(limit).offset(offset)
+		render json: { data: @products, total: @total }, status: 200
 	end
 
 	def show
@@ -39,9 +43,11 @@ class Api::V1::ProductsController < ApplicationController
     end
 
     def product_params
-		params.require(:params).permit(
+		params.permit(
+			:id,
 			:file, 
 			:page,
+			:limit,
 			:title,
 			:product_type,
 			:description,
