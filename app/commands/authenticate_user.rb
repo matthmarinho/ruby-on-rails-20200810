@@ -10,7 +10,7 @@ class AuthenticateUser
         if user 
             return {
                 auth_token: JsonWebToken.encode(user_id: user.id),
-                user: user
+                user: user.name
             }
         end
     end
