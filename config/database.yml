@@ -18,7 +18,7 @@ test:
 
 production:
   <<: *default
-  database: vt3hxebmb1y195ud
-  username: yd7e51el9nd8rtgw
-  password: ixzywymibuh6fvdp
-  host: g84t6zfpijzwx08q.cbetxkdyhwsb.us-east-1.rds.amazonaws.com
+  database: iz8rjk0fr5wdwaqd
+  username: ikqppggtohbcs9en
+  password: zlspihscbrbygl67
+  host: u6354r3es4optspf.cbetxkdyhwsb.us-east-1.rds.amazonaws.com	
